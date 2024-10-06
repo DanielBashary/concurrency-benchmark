@@ -1,0 +1,9 @@
+
+L	java:S106"+Replace this use of System.out by a logger.(êŸí¬ÿÿÿÿÿ8Û¾ÄÄ¤2
+X	java:S125/"<This block of commented-out lines of code should be removed.(†€éˆ8İ¾ÄÄ¤2
+G	java:S1064"+Replace this use of System.out by a logger.(ÖĞÏÂ8İ¾ÄÄ¤2
+L	java:S1065"+Replace this use of System.out by a logger.(¥Ù‚ƒùÿÿÿÿ8İ¾ÄÄ¤2
+^
+java:S1075A"ARefactor your code to get this URI from a customizable parameter.(Ü“Éù8ç¾ÄÄ¤2
+O
+java:S1135A"2Complete the task associated to this TODO comment.(Ü“Éù8ç¾ÄÄ¤2
