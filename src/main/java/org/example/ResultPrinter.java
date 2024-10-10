@@ -3,6 +3,7 @@ package org.example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class ResultPrinter {
     private static final Logger logger = LoggerFactory.getLogger(ResultPrinter.class);
 
@@ -12,7 +13,7 @@ public class ResultPrinter {
         long writeErrors = metricsCollector.getWriteErrors();
         long readErrors = metricsCollector.getReadErrors();
 
-        logger.info("Thread Count: {}", threadCount);
+        logger.info("=== Benchmark Results for Thread Count: {} ===", threadCount);
         logger.info("Total Write Operations: {} (Errors: {})", writeOps, writeErrors);
         logger.info("Total Read Operations: {} (Errors: {})", readOps, readErrors);
 
@@ -24,4 +25,3 @@ public class ResultPrinter {
         }
     }
 }
-
