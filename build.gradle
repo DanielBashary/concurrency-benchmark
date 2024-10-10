@@ -14,17 +14,13 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
     implementation 'com.couchbase.client:java-client:3.7.3'
     implementation("org.slf4j:slf4j-api:2.0.9")
-
-    // Remove slf4j-simple
-    // implementation("org.slf4j:slf4j-simple:2.0.9")
-
-    // Add Logback for more control over logging
     implementation 'ch.qos.logback:logback-classic:1.5.8'
-
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    compileOnly 'org.projectlombok:lombok:1.18.34'
 }
 
+//need more ram to run project
 compileJava{
     options.forkOptions.memoryMaximumSize = "1g"
 }
