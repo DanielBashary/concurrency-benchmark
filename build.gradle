@@ -22,7 +22,7 @@ dependencies {
 
 //need more ram to run project
 compileJava{
-    options.forkOptions.memoryMaximumSize = "1g"
+    options.forkOptions.memoryMaximumSize = "4g"
 }
 
 test {

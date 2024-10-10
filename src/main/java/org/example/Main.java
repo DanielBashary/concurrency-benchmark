@@ -11,9 +11,8 @@ public class Main {
     public static void main(String[] args) {
         try (CouchbaseClientManager clusterManager = new CouchbaseClientManager("127.0.0.1", "Administrator", "password", "json-store")) {
             Map<String, Object> jsonData = CouchbaseUtils.loadJsonData("/Users/danielbashary/dev/fun/couchbase-benchmark/src/main/resources/sample2.json");
-
             CouchbaseBenchmarkExecutor couchbaseBenchmarkExecutor = new CouchbaseBenchmarkExecutor(clusterManager, jsonData);
-            couchbaseBenchmarkExecutor.runBenchmarkWithThreadCount(10, 10);
+            couchbaseBenchmarkExecutor.runBenchmarkWithThreadCount(30, 60);
         } catch (IOException e) {
             logger.error(String.format("Error loading JSON data: %s", e.getMessage()));
         } catch (Exception e) {
