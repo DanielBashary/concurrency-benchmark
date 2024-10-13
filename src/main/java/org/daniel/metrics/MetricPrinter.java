@@ -1,11 +1,12 @@
-package org.example;
+package org.daniel.metrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 
-public class ResultPrinter {
-    private static final Logger logger = LoggerFactory.getLogger(ResultPrinter.class);
+public class MetricPrinter {
+    private static final Logger logger = LoggerFactory.getLogger(MetricPrinter.class);
 
     public static void printBenchmarkResults(int threadCount, MetricsCollector metricsCollector) {
         long writeOps = metricsCollector.getWriteOperations();
@@ -22,6 +23,14 @@ public class ResultPrinter {
         }
         if (readOps > 0) {
             logger.info("Average Read Latency (ns): {}", metricsCollector.getTotalReadLatency() / readOps);
+        }
+    }
+
+
+    public static void printCouchbaseMetrics(int threadCount, Map<String, Double> metrics) {
+        logger.info("=== Couchbase Metrics for Thread Count: {} ===", threadCount);
+        for (Map.Entry<String, Double> entry : metrics.entrySet()) {
+            logger.info("{}: {}", entry.getKey(), entry.getValue());
         }
     }
 }

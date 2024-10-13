@@ -1,4 +1,4 @@
-package org.example;
+package org.daniel.metrics;
 
 import java.util.concurrent.atomic.LongAdder;
 
@@ -28,7 +28,6 @@ public class MetricsCollector {
         readErrors.increment();
     }
 
-    // Getters for metrics
     public long getTotalWriteLatency() {
         return totalWriteLatency.sum();
     }

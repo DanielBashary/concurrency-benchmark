@@ -1,4 +1,4 @@
-package org.example;
+package org.daniel.metrics;
 
 import com.sun.management.OperatingSystemMXBean;
 import org.slf4j.Logger;
@@ -15,7 +15,6 @@ public class SystemUsageMonitor {
     }
 
     public void logSystemUsage() {
-        logger.info("CPU Load: {}%", osBean.getCpuLoad() * 100);
         logger.info("Available Memory (MB): {}", osBean.getFreeMemorySize() / (1024 * 1024));
     }
 }

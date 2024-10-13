@@ -17,7 +17,6 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.5.8'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.testcontainers:couchbase:1.20.2'
     compileOnly 'org.projectlombok:lombok:1.18.34'
 }
 

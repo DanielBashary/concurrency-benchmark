@@ -1,4 +1,4 @@
-package org.example;
+package org.daniel.couchbase;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
