@@ -1,3 +1,5 @@
 
 f
-java:S2095"DUse try-with-resources or close this "Stream" in a "finally" clause.(¶ήτ΅ωÿÿÿÿ8σΨΈ²§2
+java:S2095"DUse try-with-resources or close this "Stream" in a "finally" clause.(¶ήτ΅ωÿÿÿÿ8ν«©¨2
+{
+java:S2142"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(”ύΎ8π«©¨2
