@@ -40,7 +40,7 @@ public class CouchbaseBenchmarkExecutor {
     public void runBenchmarkWithThreadCount(int threadCount, int durationSeconds) throws IOException {
         // Flush the bucket before each run
         couchbaseClientManager.getCluster().buckets().flushBucket(bucketName);
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount, Thread.ofVirtual().factory());
         AtomicBoolean isRunning = new AtomicBoolean(true);
 
         // Submit benchmark tasks to the executor service
