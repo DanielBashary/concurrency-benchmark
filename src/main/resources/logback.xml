@@ -1,12 +1,10 @@
 <configuration>
-    <!-- Disable Couchbase-specific logging -->
     <logger name="com.couchbase.client" level="OFF"/>
     <logger name="com.couchbase.core" level="OFF"/>
     <logger name="com.couchbase" level="OFF"/>
     <logger name="com.couchbase.client.core" level="OFF"/>
     <logger name="com.couchbase.tracing" level="OFF"/>
 
-    <!-- Enable the root logger for other logs, like your own application logs -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>

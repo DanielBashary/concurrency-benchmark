@@ -1,35 +1,26 @@
 package org.daniel;
 
+import org.daniel.benchmark.BenchmarkRunner;
+import org.daniel.config.AppConfig;
+import org.daniel.couchbase.CouchbaseClientManagerFactory;
+import org.daniel.couchbase.CouchbaseClientManager;
+
 import java.io.IOException;
 
-import org.daniel.benchmark.CouchbaseBenchmarkExecutor;
-import org.daniel.config.AppConfig;
-import org.daniel.config.CouchbaseClientManagerFactory;
-import org.daniel.couchbase.CouchbaseClientManager;
-import org.daniel.util.JsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
-        AppConfig config = new AppConfig("application.properties");
-        try (CouchbaseClientManager clusterManager = CouchbaseClientManagerFactory.create(config.getProperties())) {
-
-            CouchbaseBenchmarkExecutor couchbaseBenchmarkExecutor = new CouchbaseBenchmarkExecutor(clusterManager, JsonUtils.loadJsonFilePaths("json-files"));
-
-            int threadCount = Integer.parseInt(config.getProperty("threadCount"));
-
-            logger.info("Starting benchmark with {} threads.", threadCount);
-            clusterManager.getCluster().buckets().flushBucket("json-store");
-
-            couchbaseBenchmarkExecutor.runBenchmarkWithThreadCount(threadCount, Integer.parseInt(config.getProperty("processSeconds")));
-
+        try {
+            AppConfig config = new AppConfig("application.properties");
+            CouchbaseClientManager clusterManager = CouchbaseClientManagerFactory.create(config.getProperties());
+            BenchmarkRunner benchmarkRunner = new BenchmarkRunner(config, clusterManager);
+            benchmarkRunner.runBenchmarks();
         } catch (IOException e) {
-            logger.error("Error loading JSON file paths: {}", e.getMessage());
-        } catch (Exception e) {
-            logger.error("Error during benchmark execution: {}", e.getMessage());
+            throw new IOException("application.properties file not found on classpath.", e);
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error loading JSON file paths", e);
         }
     }
 }

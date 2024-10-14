@@ -51,4 +51,14 @@ public class MetricsCollector {
     public long getReadErrors() {
         return readErrors.sum();
     }
+
+    public long getAverageWriteLatency() {
+        long writeOps = getWriteOperations();
+        return writeOps > 0 ? getTotalWriteLatency() / writeOps : 0;
+    }
+
+    public long getAverageReadLatency() {
+        long readOps = getReadOperations();
+        return readOps > 0 ? getTotalReadLatency() / readOps : 0;
+    }
 }

@@ -14,11 +14,13 @@ import java.util.stream.Stream;
 
 public class JsonUtils {
 
-    private JsonUtils() {}
+    private JsonUtils() {
+    }
 
     public static Map<String, Object> loadJsonData(String filePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(filePath), new TypeReference<>() {});
+        return mapper.readValue(new File(filePath), new TypeReference<>() {
+        });
     }
 
     public static List<Path> loadJsonFilePaths(String directory) throws IOException {
@@ -26,7 +28,8 @@ public class JsonUtils {
             return paths
                     .filter(Files::isRegularFile)
                     .toList();
+        } catch (Exception e) {
+            throw new IOException("Json file not loaded from correct path", e);
         }
     }
-
 }

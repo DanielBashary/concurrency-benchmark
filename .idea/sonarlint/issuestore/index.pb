@@ -38,3 +38,15 @@ P
  src/test/java/JsonUtilsTest.java,8/8/888067e6c42e0607b4bd2494b507485fc216d25c
 q
 Asrc/main/java/org/daniel/couchbase/CouchbaseMetricsRetriever.java,a/4/a4f1c558529ade1286fe3554ad754f161e75c18c
+8
+docs.txt,0/f/0ffe67fb7199565fe903c42a989bf354220de539
+^
+.src/main/java/org/daniel/config/AppConfig.java,2/f/2f164b393183382d756de197ce9c6c2b2f72574d
+r
+Bsrc/main/java/org/daniel/config/CouchbaseClientManagerFactory.java,c/4/c4b6c7dfca893753df1b8be9b72ec93ae19f1b60
+g
+7src/main/java/org/daniel/benchmark/BenchmarkRunner.java,7/9/79d0711af622d406df7940315d2d698e0aa435c2
+o
+?src/main/java/org/daniel/metrics/CouchbaseMetricsRetriever.java,1/c/1c7c3426b7f03e9faecc9683f579daef6ce6f870
+u
+Esrc/main/java/org/daniel/couchbase/CouchbaseClientManagerFactory.java,c/a/ca2cdcf4d71f22f788411e379aa84d2685cbffbe

@@ -1,4 +1,4 @@
-package org.daniel.couchbase;
+package org.daniel.metrics;
 
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.http.*;
@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public class CouchbaseMetricsRetriever {
+    private static final Logger logger = LoggerFactory.getLogger(CouchbaseMetricsRetriever.class);
     private final Cluster cluster;
     private final String bucketName;
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final Logger logger = LoggerFactory.getLogger(CouchbaseMetricsRetriever.class);
 
     public CouchbaseMetricsRetriever(Cluster cluster, String bucketName) {
         this.cluster = cluster;
@@ -47,7 +47,6 @@ public class CouchbaseMetricsRetriever {
 
             String bucketContent = bucketResult.contentAsString();
             JsonNode bucketMetrics = objectMapper.readTree(bucketContent);
-
             JsonNode opSamples = bucketMetrics.at("/op/samples");
             double opsPerSec = getLastSampleValue(opSamples.path("ops"));
 

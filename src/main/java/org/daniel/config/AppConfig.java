@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 public class AppConfig {
     private final Properties properties;
 
@@ -19,10 +20,11 @@ public class AppConfig {
         }
     }
 
-    public String getProperty(String property){
+    public String getProperty(String property) {
         return properties.getProperty(property);
     }
 
-    public Properties getProperties(){
+    public Properties getProperties() {
         return properties;
-    }}
+    }
+}
