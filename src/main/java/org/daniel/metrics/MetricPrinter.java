@@ -6,12 +6,21 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Prints metrics collected during the benchmark runs.
+ */
 public class MetricPrinter {
     private static final Logger logger = LoggerFactory.getLogger(MetricPrinter.class);
 
     private MetricPrinter() {
     }
 
+    /**
+     * Prints the metrics for a single benchmark run.
+     *
+     * @param threadCount      Number of threads used in the benchmark.
+     * @param metricsCollector Metrics collected during the run.
+     */
     public static void printBenchmarkResults(int threadCount, MetricsCollector metricsCollector) {
         long writeOps = metricsCollector.getWriteOperations();
         long readOps = metricsCollector.getReadOperations();
@@ -30,6 +39,12 @@ public class MetricPrinter {
         }
     }
 
+    /**
+     * Prints the average metrics across multiple benchmark runs.
+     *
+     * @param threadCount       Number of threads used in the benchmarks.
+     * @param metricsCollectors List of metrics collected from each run.
+     */
     public static void printAverageBenchmarkResults(int threadCount, List<MetricsCollector> metricsCollectors) {
         int runs = metricsCollectors.size();
         long totalWriteOps = 0;
@@ -63,6 +78,12 @@ public class MetricPrinter {
         logger.info("Average Read Latency (ns): {}", avgReadLatency);
     }
 
+    /**
+     * Prints the metrics from Couchbase Cluster collected after the benchmark runs.
+     *
+     * @param threadCount Number of threads used in the benchmarks.
+     * @param metrics     Map of Couchbase metrics.
+     */
     public static void printCouchbaseMetrics(int threadCount, Map<String, Double> metrics) {
         logger.info("=== Couchbase Metrics for Thread Count: {} ===", threadCount);
         for (Map.Entry<String, Double> entry : metrics.entrySet()) {

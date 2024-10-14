@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+/**
+ * Executes the benchmark by creating and managing threads that perform read/write operations on Couchbase.
+ */
 public class CouchbaseBenchmarkExecutor {
     private final CouchbaseClientManager couchbaseClientManager;
     private final List<Path> jsonFilePaths;
@@ -27,12 +30,20 @@ public class CouchbaseBenchmarkExecutor {
         this.bucketName = couchbaseClientManager.getCollection().bucketName();
     }
 
+    /**
+     * Runs the benchmark with the specified number of threads and duration.
+     *
+     * @param threadCount     Number of concurrent threads to run.
+     * @param durationSeconds Duration of the benchmark in seconds.
+     * @throws IOException if there is an error loading JSON files.
+     */
     public void runBenchmarkWithThreadCount(int threadCount, int durationSeconds) throws IOException {
-        // remove all elements in bucket before each run
+        // Flush the bucket before each run
         couchbaseClientManager.getCluster().buckets().flushBucket(bucketName);
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         AtomicBoolean isRunning = new AtomicBoolean(true);
 
+        // Submit benchmark tasks to the executor service
         for (int i = 0; i < threadCount; i++) {
             Path jsonFilePath = jsonFilePaths.get(i % jsonFilePaths.size());
             Map<String, Object> jsonData = JsonUtils.loadJsonData(jsonFilePath.toString());
@@ -47,11 +58,12 @@ public class CouchbaseBenchmarkExecutor {
         }
 
         try {
+            // Let the benchmark run for the specified duration
             Thread.sleep(TimeUnit.SECONDS.toMillis(durationSeconds));
-            isRunning.set(false);
-            executorService.shutdown();
+            isRunning.set(false);  // Signal tasks to stop
+            executorService.shutdown();  // Initiate shutdown
         } catch (InterruptedException e) {
-            executorService.shutdownNow();
+            executorService.shutdownNow(); // Force shutdown
             Thread.currentThread().interrupt();
         }
     }

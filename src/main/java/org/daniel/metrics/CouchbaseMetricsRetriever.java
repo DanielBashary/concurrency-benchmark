@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * Retrieves metrics from the Couchbase cluster and bucket.
+ */
 public class CouchbaseMetricsRetriever {
     private static final Logger logger = LoggerFactory.getLogger(CouchbaseMetricsRetriever.class);
     private final Cluster cluster;
@@ -20,6 +23,11 @@ public class CouchbaseMetricsRetriever {
         this.bucketName = bucketName;
     }
 
+    /**
+     * Retrieves various metrics from the Couchbase cluster and bucket.
+     *
+     * @return A map containing metric names and their values.
+     */
     public Map<String, Double> retrieveMetrics() {
         Map<String, Double> metricsMap = new HashMap<>();
         try {
@@ -32,6 +40,7 @@ public class CouchbaseMetricsRetriever {
             String clusterContent = clusterResult.contentAsString();
             JsonNode clusterMetrics = objectMapper.readTree(clusterContent);
 
+            // Extract CPU and memory usage
             JsonNode nodeStats = clusterMetrics.at("/nodes/0/systemStats");
             double cpuUsage = nodeStats.path("cpu_utilization_rate").asDouble();
             double memTotal = nodeStats.path("mem_total").asDouble();
@@ -40,6 +49,7 @@ public class CouchbaseMetricsRetriever {
             metricsMap.put("Cluster CPU Usage (%)", cpuUsage);
             metricsMap.put("Cluster Memory Used (MB)", (memTotal - memFree) / (1024 * 1024));
 
+            // Retrieve bucket-level metrics
             HttpResponse bucketResult = cluster.httpClient().get(
                     HttpTarget.manager(),
                     HttpPath.of("/pools/default/buckets/" + bucketName + "/stats"),
@@ -47,6 +57,8 @@ public class CouchbaseMetricsRetriever {
 
             String bucketContent = bucketResult.contentAsString();
             JsonNode bucketMetrics = objectMapper.readTree(bucketContent);
+
+            // Extract operations per second
             JsonNode opSamples = bucketMetrics.at("/op/samples");
             double opsPerSec = getLastSampleValue(opSamples.path("ops"));
 

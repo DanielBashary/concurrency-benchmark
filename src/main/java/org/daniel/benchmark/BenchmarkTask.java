@@ -9,6 +9,10 @@ import org.daniel.metrics.MetricsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Represents a single benchmark task that performs write and read operations.
+ * Each task runs in a separate thread.
+ */
 public class BenchmarkTask implements Runnable {
     private final Collection collection;
     private final AtomicInteger documentIdCounter;
@@ -27,8 +31,8 @@ public class BenchmarkTask implements Runnable {
     }
 
     /**
-     * Executes the benchmark task. Continuously performs a single write operation and 3 read operations
-     * continuously runs until the isRunning flag is set to false.
+     * Executes the benchmark task.
+     * Continuously performs write and read operations until the isRunning flag is set to false.
      */
     @Override
     public void run() {
@@ -36,6 +40,7 @@ public class BenchmarkTask implements Runnable {
             int documentId = documentIdCounter.getAndIncrement();
             String docIdStr = String.valueOf(documentId);
 
+            // Write Operation
             long writeStart = System.nanoTime();
             try {
                 collection.upsert(docIdStr, documentToAdd);
@@ -45,6 +50,7 @@ public class BenchmarkTask implements Runnable {
                 logger.error("Write operation failed for document ID {}: {}", docIdStr, e.getMessage(), e);
             }
 
+            // Read Operations (three times)
             for (int i = 0; i < 3; i++) {
                 long readStart = System.nanoTime();
                 try {

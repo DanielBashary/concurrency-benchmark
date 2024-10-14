@@ -2,6 +2,9 @@ package org.daniel.metrics;
 
 import java.util.concurrent.atomic.LongAdder;
 
+/**
+ * Collects metrics during the benchmark runs.
+ */
 public class MetricsCollector {
     private final LongAdder totalWriteLatency = new LongAdder();
     private final LongAdder totalReadLatency = new LongAdder();
