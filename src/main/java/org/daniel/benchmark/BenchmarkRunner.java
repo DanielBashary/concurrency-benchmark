@@ -34,9 +34,9 @@ public class BenchmarkRunner {
         this.config = config;
         this.clusterManager = clusterManager;
         this.threadCount = config.getThreadCounts();
-        this.processSeconds = Integer.parseInt(config.getProperty("processSeconds"));
-        this.runs = Integer.parseInt(config.getProperty("threadPoolRuns"));
-        this.virtualThreads = Boolean.parseBoolean(config.getProperty("virtualThreads"));
+        this.processSeconds = Integer.parseInt(config.getProperty("process-seconds"));
+        this.runs = Integer.parseInt(config.getProperty("thread-pool-runs"));
+        this.virtualThreads = Boolean.parseBoolean(config.getProperty("virtual-threads"));
         this.metricsRetriever = new CouchbaseMetricsRetriever(clusterManager.getCluster(), clusterManager.getCollection().bucketName());
     }
 
@@ -95,7 +95,7 @@ public class BenchmarkRunner {
      * Sleeps for a specified duration between runs to allow the system to cool down.
      */
     private void sleepBetweenRuns() {
-        int sleepSeconds = Integer.parseInt(config.getProperty("sleepBetweenRuns"));
+        int sleepSeconds = Integer.parseInt(config.getProperty("sleep-between-runs"));
         logger.info("Sleeping for {} seconds before the next run...", sleepSeconds);
         try {
             Thread.sleep(TimeUnit.SECONDS.toMillis(sleepSeconds));

@@ -49,9 +49,9 @@ public class AppConfig {
         return properties;
     }
 
-    // Convert threadCount from a comma-separated string into a list of integers
+    // Convert thread-count from a comma-separated string into a list of integers
     public List<Integer> getThreadCounts() {
-        String threadCountProperty = getProperty("threadCount");
+        String threadCountProperty = getProperty("thread-count");
         return Arrays.stream(threadCountProperty.split(","))
                 .map(String::trim)
                 .map(Integer::parseInt)

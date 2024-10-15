@@ -34,10 +34,11 @@ couchbase.password=               # Replace with your Couchbase password
 couchbase.bucket=json-store       # Replace with the bucket name you want to use
 
 # Benchmark configuration
-threadCount=100                   # Number of threads to use in the benchmark
-threadPoolRuns=5                  # Number of times to repeat the benchmark
+thread-count=100                  # Number of threads to use in the benchmark
+thread-pool-runs=5                # Number of times to repeat the benchmark
 processSeconds=5                  # Duration of each benchmark run in seconds
-sleepBetweenRuns=0                # Seconds to sleep between benchmark runs
+sleep-between-runs=0              # Seconds to sleep between benchmark runs
+virtual-threads=true              # Whether to use Normal or Virtual threads
 ```
 
 ### **3. Build the Application Using Gradle**
