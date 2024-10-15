@@ -37,10 +37,15 @@ public class CouchbaseBenchmarkExecutor {
      * @param durationSeconds Duration of the benchmark in seconds.
      * @throws IOException if there is an error loading JSON files.
      */
-    public void runBenchmarkWithThreadCount(int threadCount, int durationSeconds) throws IOException {
+    public void runBenchmarkWithThreadCount(int threadCount, int durationSeconds, boolean virtualThreads) throws IOException {
         // Flush the bucket before each run
         couchbaseClientManager.getCluster().buckets().flushBucket(bucketName);
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount, Thread.ofVirtual().factory());
+        ExecutorService executorService;
+        if (virtualThreads) {
+            executorService = Executors.newFixedThreadPool(threadCount, Thread.ofVirtual().factory());
+        }else{
+            executorService = Executors.newFixedThreadPool(threadCount);
+        }
         AtomicBoolean isRunning = new AtomicBoolean(true);
 
         // Submit benchmark tasks to the executor service

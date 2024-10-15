@@ -25,41 +25,46 @@ public class BenchmarkRunner {
     private final AppConfig config;
     private final CouchbaseClientManager clusterManager;
     private final CouchbaseMetricsRetriever metricsRetriever;
-    private final int threadCount;
+    private final List<Integer> threadCount;
+    private final boolean virtualThreads;
     private final int processSeconds;
     private final int runs;
 
     public BenchmarkRunner(AppConfig config, CouchbaseClientManager clusterManager) {
         this.config = config;
         this.clusterManager = clusterManager;
-        this.threadCount = Integer.parseInt(config.getProperty("threadCount"));
+        this.threadCount = config.getThreadCounts();
         this.processSeconds = Integer.parseInt(config.getProperty("processSeconds"));
         this.runs = Integer.parseInt(config.getProperty("threadPoolRuns"));
+        this.virtualThreads = Boolean.parseBoolean(config.getProperty("virtualThreads"));
         this.metricsRetriever = new CouchbaseMetricsRetriever(clusterManager.getCluster(), clusterManager.getCollection().bucketName());
     }
 
     /**
      * Executes the benchmark runs based on the configuration.
+     * Loops through Threads list and how many runs for each thread count
      *
      * @throws IOException if there is an error loading JSON files.
      */
 
     public void runBenchmarks() throws IOException {
-        logger.info("Starting benchmark with {} threads.", threadCount);
-        List<MetricsCollector> runMetricsCollectors = new ArrayList<>();
+        for (int currentThreadCount : threadCount) {
+            logger.info("Starting benchmark with {} threads.", currentThreadCount);
+            List<MetricsCollector> runMetricsCollectors = new ArrayList<>();
 
-        // Loop to execute multiple benchmark runs
-        for (int run = 1; run <= runs; run++) {
-            logger.info("Starting run {}/{}", run, runs);
-            runSingleBenchmark(runMetricsCollectors);
+            // Loop to execute multiple benchmark runs
+            for (int run = 1; run <= runs; run++) {
+                logger.info("Starting run {}/{}", run, runs);
+                runSingleBenchmark(runMetricsCollectors, currentThreadCount);
 
-            if (run < runs) {
-                sleepBetweenRuns();
+                if (run < runs) {
+                    sleepBetweenRuns();
+                }
             }
-        }
 
-        // Print the results after all runs are completed
-        printBenchmarkResults(runMetricsCollectors);
+            // Print the results after all runs are completed
+            printBenchmarkResults(runMetricsCollectors, currentThreadCount);
+        }
     }
 
     /**
@@ -68,7 +73,7 @@ public class BenchmarkRunner {
      * @param runMetricsCollectors List to collect metrics from each run.
      * @throws IOException if there is an error loading JSON files.
      */
-    private void runSingleBenchmark(List<MetricsCollector> runMetricsCollectors) throws IOException {
+    private void runSingleBenchmark(List<MetricsCollector> runMetricsCollectors, int threadCountCurrent) throws IOException {
         MetricsCollector metricsCollector = new MetricsCollector();
         AtomicInteger documentIdCounter = new AtomicInteger();
         List<Path> jsonFilePaths = JsonUtils.loadJsonFilePaths("json-files");
@@ -81,8 +86,7 @@ public class BenchmarkRunner {
         );
 
         // Run the benchmark with the specified thread count and duration
-        benchmarkExecutor.runBenchmarkWithThreadCount(threadCount, processSeconds);
-
+        benchmarkExecutor.runBenchmarkWithThreadCount(threadCountCurrent, processSeconds, virtualThreads);
         // Collect metrics from this run
         runMetricsCollectors.add(metricsCollector);
     }
@@ -106,19 +110,19 @@ public class BenchmarkRunner {
      *
      * @param runMetricsCollectors List of metrics collected from each run.
      */
-    private void printBenchmarkResults(List<MetricsCollector> runMetricsCollectors) {
+    private void printBenchmarkResults(List<MetricsCollector> runMetricsCollectors, int threadCountCurrent) {
         // Print benchmark results for each run
         for (int run = 1; run <= runs; run++) {
             logger.info("=== Results for Run {}/{} ===", run, runs);
             MetricsCollector metricsCollector = runMetricsCollectors.get(run - 1);
-            MetricPrinter.printBenchmarkResults(threadCount, metricsCollector);
+            MetricPrinter.printBenchmarkResults(threadCountCurrent, metricsCollector);
         }
 
         // Print the average metrics over all runs
-        MetricPrinter.printAverageBenchmarkResults(threadCount, runMetricsCollectors);
+        MetricPrinter.printAverageBenchmarkResults(threadCountCurrent, runMetricsCollectors);
 
         // Retrieve and print Couchbase metrics
         Map<String, Double> couchbaseMetrics = metricsRetriever.retrieveMetrics();
-        MetricPrinter.printCouchbaseMetrics(threadCount, couchbaseMetrics);
+        MetricPrinter.printCouchbaseMetrics(threadCountCurrent, couchbaseMetrics);
     }
 }

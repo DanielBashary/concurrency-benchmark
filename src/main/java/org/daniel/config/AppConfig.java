@@ -3,6 +3,8 @@ package org.daniel.config;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -46,4 +48,14 @@ public class AppConfig {
     public Properties getProperties() {
         return properties;
     }
+
+    // Convert threadCount from a comma-separated string into a list of integers
+    public List<Integer> getThreadCounts() {
+        String threadCountProperty = getProperty("threadCount");
+        return Arrays.stream(threadCountProperty.split(","))
+                .map(String::trim)
+                .map(Integer::parseInt)
+                .toList();
+    }
+
 }
