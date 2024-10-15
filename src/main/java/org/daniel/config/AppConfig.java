@@ -1,6 +1,5 @@
 package org.daniel.config;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -8,54 +7,47 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Loads application configuration from a properties file.
+ * Handles loading and providing access to application configuration properties.
  */
 public class AppConfig {
     private final Properties properties;
 
-    /**
-     * Constructs the AppConfig by loading properties from the specified file.
-     *
-     * @param propertiesFileName Name of the properties file.
-     * @throws IOException if the properties file is not found or cannot be loaded.
-     */
     public AppConfig(String propertiesFileName) throws IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream(propertiesFileName)) {
+        properties = new Properties();
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFileName)) {
             if (inputStream == null) {
-                throw new FileNotFoundException("Property file '" + propertiesFileName + "' not found in the classpath");
+                throw new IOException("Properties file '" + propertiesFileName + "' not found in classpath.");
             }
-            properties = new Properties();
             properties.load(inputStream);
         }
     }
 
-    /**
-     * Retrieves the value of a property.
-     *
-     * @param property Name of the property.
-     * @return Value of the property.
-     */
-    public String getProperty(String property) {
-        return properties.getProperty(property);
-    }
-
-    /**
-     * Retrieves all properties.
-     *
-     * @return Properties object containing all properties.
-     */
     public Properties getProperties() {
         return properties;
     }
 
-    // Convert thread-count from a comma-separated string into a list of integers
+    // Benchmark configuration getters with validation
     public List<Integer> getThreadCounts() {
-        String threadCountProperty = getProperty("thread-count");
-        return Arrays.stream(threadCountProperty.split(","))
+        String threadCountsStr = properties.getProperty("thread-count");
+        return Arrays.stream(threadCountsStr.split(","))
                 .map(String::trim)
                 .map(Integer::parseInt)
                 .toList();
     }
 
+    public int getThreadPoolRuns() {
+        return Integer.parseInt(properties.getProperty("thread-pool-runs"));
+    }
+
+    public int getProcessSeconds() {
+        return Integer.parseInt(properties.getProperty("process-seconds"));
+    }
+
+    public int getSleepBetweenRunsSeconds() {
+        return Integer.parseInt(properties.getProperty("sleep-between-runs"));
+    }
+
+    public boolean isUseVirtualThreads() {
+        return Boolean.parseBoolean(properties.getProperty("virtual-threads"));
+    }
 }

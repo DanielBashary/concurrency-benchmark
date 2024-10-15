@@ -33,7 +33,6 @@ public class Main {
             throw new RuntimeException("application.properties file not found on classpath.", e);
 
         } catch (RuntimeException e) {
-            logger.error("Error during benchmark execution: {}", e.getMessage(), e);
             throw new RuntimeException("Error during benchmark execution", e);
         }
     }

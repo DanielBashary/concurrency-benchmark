@@ -42,7 +42,7 @@ public class CouchbaseBenchmarkExecutor {
         couchbaseClientManager.getCluster().buckets().flushBucket(bucketName);
         ExecutorService executorService;
         if (virtualThreads) {
-            executorService = Executors.newFixedThreadPool(threadCount, Thread.ofVirtual().factory());
+            executorService = Executors.newVirtualThreadPerTaskExecutor();
         }else{
             executorService = Executors.newFixedThreadPool(threadCount);
         }
